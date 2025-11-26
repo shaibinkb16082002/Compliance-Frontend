@@ -95,6 +95,14 @@ const injectStyles = () => {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes toast-slide-in {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes toast-slide-out {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(100%); }
+    }
     .pipeline-step-enter {
       animation: fade-in-up 0.5s ease forwards;
     }
@@ -787,10 +795,39 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
 function PipelineMonitor({ status, logs, isMobile }) {
   const logsEndRef = useRef(null)
   const containerRef = useRef(null)
+  const logsContainerRef = useRef(null)
+  const [isUserScrolling, setIsUserScrolling] = useState(false)
 
+  // Check if user is near bottom of logs
+  const isNearBottom = () => {
+    const container = logsContainerRef.current
+    if (!container) return true
+    const threshold = 50 // pixels from bottom
+    return container.scrollHeight - container.scrollTop - container.clientHeight < threshold
+  }
+
+  // Handle scroll events to detect if user scrolled up
+  const handleScroll = () => {
+    if (!isNearBottom()) {
+      setIsUserScrolling(true)
+    } else {
+      setIsUserScrolling(false)
+    }
+  }
+
+  // Only auto-scroll if user hasn't scrolled up
   useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [logs])
+    if (!isUserScrolling && logsEndRef.current) {
+      logsEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [logs, isUserScrolling])
+
+  // Reset scroll state when pipeline starts or stops
+  useEffect(() => {
+    if (status === 'idle' || status === 'running') {
+      setIsUserScrolling(false)
+    }
+  }, [status])
 
   useEffect(() => {
     injectStyles()
@@ -824,7 +861,10 @@ function PipelineMonitor({ status, logs, isMobile }) {
           <span style={{ fontSize: '12px', color: theme.textMuted }}>{logs.length} entries</span>
         </div>
       </div>
-      <div style={{
+      <div
+        ref={logsContainerRef}
+        onScroll={handleScroll}
+        style={{
         backgroundColor: '#0f0f0f',
         borderRadius: '10px',
         padding: isMobile ? '12px' : '16px',
@@ -1018,6 +1058,68 @@ function JiraView({ jiraTicket, status, isMobile }) {
             Open
           </a>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// Toast Notification Component
+function Toast({ message, show, onClose }) {
+  useEffect(() => {
+    if (show) {
+      const timer = setTimeout(() => {
+        onClose()
+      }, 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [show, onClose])
+
+  if (!show) return null
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      zIndex: 1000,
+      animation: 'toast-slide-in 0.3s ease forwards'
+    }}>
+      <div style={{
+        backgroundColor: '#FFFFFF',
+        border: '1px solid #171717',
+        borderRadius: '8px',
+        padding: '14px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        minWidth: '280px',
+        maxWidth: '400px'
+      }}>
+        <Mail style={{ width: '20px', height: '20px', color: '#171717', flexShrink: 0 }} />
+        <span style={{
+          color: '#171717',
+          fontSize: '14px',
+          fontWeight: 500,
+          flex: 1
+        }}>
+          {message}
+        </span>
+        <button
+          onClick={onClose}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px',
+            color: '#525252',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <X style={{ width: '16px', height: '16px' }} />
+        </button>
       </div>
     </div>
   )
@@ -1294,6 +1396,7 @@ function App() {
   const [jiraTicket, setJiraTicket] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [toast, setToast] = useState({ show: false, message: '' })
 
   const { width } = useWindowSize()
   const isMobile = width < 768
@@ -1331,6 +1434,12 @@ function App() {
             setResult(resultData.result)
             setJiraTicket(resultData.jira_ticket)
             setError(resultData.error)
+
+            // Show toast if no new mails found
+            if (resultData.result && resultData.result.message === 'No new compliance emails found') {
+              setToast({ show: true, message: 'No new mails to fetch' })
+            }
+
             clearInterval(interval)
           }
         } catch (err) {
@@ -1441,6 +1550,11 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: theme.bgSecondary }}>
+      <Toast
+        message={toast.message}
+        show={toast.show}
+        onClose={() => setToast({ show: false, message: '' })}
+      />
       <Sidebar
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
