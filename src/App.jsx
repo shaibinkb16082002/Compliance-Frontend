@@ -662,7 +662,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}>
             <MessageCircle style={{ width: '14px', height: '14px' }} />
-            Customer Care
+            FinWise Assistant
           </button>
           <button
             onClick={() => window.open('https://3.225.192.77/', '_blank')}
