@@ -795,39 +795,6 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
 function PipelineMonitor({ status, logs, isMobile }) {
   const logsEndRef = useRef(null)
   const containerRef = useRef(null)
-  const logsContainerRef = useRef(null)
-  const [isUserScrolling, setIsUserScrolling] = useState(false)
-
-  // Check if user is near bottom of logs
-  const isNearBottom = () => {
-    const container = logsContainerRef.current
-    if (!container) return true
-    const threshold = 50 // pixels from bottom
-    return container.scrollHeight - container.scrollTop - container.clientHeight < threshold
-  }
-
-  // Handle scroll events to detect if user scrolled up
-  const handleScroll = () => {
-    if (!isNearBottom()) {
-      setIsUserScrolling(true)
-    } else {
-      setIsUserScrolling(false)
-    }
-  }
-
-  // Only auto-scroll if user hasn't scrolled up
-  useEffect(() => {
-    if (!isUserScrolling && logsEndRef.current) {
-      logsEndRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [logs, isUserScrolling])
-
-  // Reset scroll state when pipeline starts or stops
-  useEffect(() => {
-    if (status === 'idle' || status === 'running') {
-      setIsUserScrolling(false)
-    }
-  }, [status])
 
   useEffect(() => {
     injectStyles()
@@ -861,10 +828,7 @@ function PipelineMonitor({ status, logs, isMobile }) {
           <span style={{ fontSize: '12px', color: theme.textMuted }}>{logs.length} entries</span>
         </div>
       </div>
-      <div
-        ref={logsContainerRef}
-        onScroll={handleScroll}
-        style={{
+      <div style={{
         backgroundColor: '#0f0f0f',
         borderRadius: '10px',
         padding: isMobile ? '12px' : '16px',
@@ -881,7 +845,6 @@ function PipelineMonitor({ status, logs, isMobile }) {
           logs.map((log, idx) => (
             <div
               key={idx}
-              className="pipeline-step-enter"
               style={{
                 padding: '6px 10px',
                 marginBottom: '2px',
@@ -892,7 +855,6 @@ function PipelineMonitor({ status, logs, isMobile }) {
                 color: log.type === 'success' ? '#4ade80' :
                        log.type === 'error' ? '#f87171' :
                        log.type === 'warning' ? '#fbbf24' : '#d4d4d4',
-                animationDelay: `${idx * 0.05}s`,
                 wordBreak: 'break-word'
               }}
             >
