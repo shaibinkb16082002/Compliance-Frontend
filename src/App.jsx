@@ -665,7 +665,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
             Customer Care
           </button>
           <button
-            onClick={() => window.open('https://your-calling-agent-url.com', '_blank')}
+            onClick={() => window.open('https://3.225.192.77/', '_blank')}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -681,8 +681,8 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
               fontSize: '13px',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}>
-            <Phone style={{ width: '14px', height: '14px' }} />
-            Calling Agent
+            <Brain style={{ width: '14px', height: '14px' }} />
+            Multimodal AI Assistant
           </button>
         </div>
       </div>
