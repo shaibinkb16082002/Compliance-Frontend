@@ -645,7 +645,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
             </button>
           </div>
           <button
-            onClick={() => window.open('https://customerchatbot-backend.onrender.com', '_blank')}
+            onClick={() => window.open('https://customerchatbot-frontend.onrender.com', '_blank')}
             style={{
               display: 'flex',
               alignItems: 'center',
