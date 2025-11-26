@@ -571,11 +571,11 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
   }
 
   const pipelineSteps = [
-    { step: 1, icon: Mail, title: 'Gmail Check' },
-    { step: 2, icon: FileText, title: 'Load Reference' },
-    { step: 3, icon: FileSearch, title: 'Extract Text' },
+    { step: 1, icon: Mail, title: 'Monitoring Inbox' },
+    { step: 2, icon: FileText, title: 'Retrieving Emails' },
+    { step: 3, icon: FileSearch, title: 'Extracting Text' },
     { step: 4, icon: Cpu, title: 'AI Analysis' },
-    { step: 5, icon: SendHorizontal, title: 'Create JIRA' },
+    { step: 5, icon: SendHorizontal, title: 'Creating JIRA' },
   ]
 
   const isVertical = isMobile || isTablet
