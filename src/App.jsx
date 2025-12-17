@@ -28,7 +28,7 @@ import {
 import './App.css'
 
 // API Base URL
-const API_URL = 'https://compliance-backend-41ew.onrender.com'
+const API_URL = 'https://ai.arttechgroup.com:7777/compliance'
 
 // Professional Color Theme
 const theme = {
