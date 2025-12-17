@@ -1381,17 +1381,17 @@ function App() {
     if (status === 'running') {
       interval = setInterval(async () => {
         try {
-          const statusRes = await fetch(`${API_URL}/api/status`)
+          const statusRes = await fetch(`${API_URL}/api/status`, { cache: 'no-store' })
           const statusData = await statusRes.json()
           setStatus(statusData.status)
           setCurrentStep(statusData.current_step)
 
-          const logsRes = await fetch(`${API_URL}/api/logs`)
+          const logsRes = await fetch(`${API_URL}/api/logs`, { cache: 'no-store' })
           const logsData = await logsRes.json()
           setLogs(logsData.logs)
 
           if (statusData.status === 'completed' || statusData.status === 'error') {
-            const resultRes = await fetch(`${API_URL}/api/result`)
+            const resultRes = await fetch(`${API_URL}/api/result`, { cache: 'no-store' })
             const resultData = await resultRes.json()
             setResult(resultData.result)
             setJiraTicket(resultData.jira_ticket)
@@ -1416,16 +1416,16 @@ function App() {
   useEffect(() => {
     const fetchInitialStatus = async () => {
       try {
-        const statusRes = await fetch(`${API_URL}/api/status`)
+        const statusRes = await fetch(`${API_URL}/api/status`, { cache: 'no-store' })
         const statusData = await statusRes.json()
         setStatus(statusData.status)
         setCurrentStep(statusData.current_step)
 
-        const logsRes = await fetch(`${API_URL}/api/logs`)
+        const logsRes = await fetch(`${API_URL}/api/logs`, { cache: 'no-store' })
         const logsData = await logsRes.json()
         setLogs(logsData.logs)
 
-        const resultRes = await fetch(`${API_URL}/api/result`)
+        const resultRes = await fetch(`${API_URL}/api/result`, { cache: 'no-store' })
         const resultData = await resultRes.json()
         setResult(resultData.result)
         setJiraTicket(resultData.jira_ticket)
