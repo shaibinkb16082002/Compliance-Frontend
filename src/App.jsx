@@ -645,7 +645,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
             </button>
           </div>
           <button
-            onClick={() => window.open('https://ai.arttechgroup.com:7777/chatbot', '_blank')}
+            onClick={() => window.open('https://ai.arttechgroup.com:7777/chatbot/', '_blank')}
             style={{
               display: 'flex',
               alignItems: 'center',
