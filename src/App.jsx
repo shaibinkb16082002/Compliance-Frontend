@@ -645,7 +645,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
             </button>
           </div>
           <button
-            onClick={() => window.open('https://customerchatbot-frontend.onrender.com', '_blank')}
+            onClick={() => window.open('https://ai.arttechgroup.com:7777/chatbot', '_blank')}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -665,7 +665,7 @@ function Dashboard({ status, currentStep, runPipeline, resetPipeline, isLoading,
             FinWise Assistant
           </button>
           <button
-            onClick={() => window.open('https://3.225.192.77/', '_blank')}
+            onClick={() => window.open('https://chatbot.artechsoft.co.in/', '_blank')}
             style={{
               display: 'flex',
               alignItems: 'center',
