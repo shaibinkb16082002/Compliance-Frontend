@@ -28,7 +28,7 @@ import {
 import './App.css'
 
 // API Base URL
-const API_URL = 'https://ai.arttechgroup.com:7777/compliance'
+const API_URL = 'https://ai.arttechgroup.com:7777/compliance/'
 
 // Professional Color Theme
 const theme = {
@@ -1381,17 +1381,17 @@ function App() {
     if (status === 'running') {
       interval = setInterval(async () => {
         try {
-          const statusRes = await fetch(`${API_URL}/api/status`, { cache: 'no-store' })
+          const statusRes = await fetch(`${API_URL}api/status`, { cache: 'no-store' })
           const statusData = await statusRes.json()
           setStatus(statusData.status)
           setCurrentStep(statusData.current_step)
 
-          const logsRes = await fetch(`${API_URL}/api/logs`, { cache: 'no-store' })
+          const logsRes = await fetch(`${API_URL}api/logs`, { cache: 'no-store' })
           const logsData = await logsRes.json()
           setLogs(logsData.logs)
 
           if (statusData.status === 'completed' || statusData.status === 'error') {
-            const resultRes = await fetch(`${API_URL}/api/result`, { cache: 'no-store' })
+            const resultRes = await fetch(`${API_URL}api/result`, { cache: 'no-store' })
             const resultData = await resultRes.json()
             setResult(resultData.result)
             setJiraTicket(resultData.jira_ticket)
@@ -1416,16 +1416,16 @@ function App() {
   useEffect(() => {
     const fetchInitialStatus = async () => {
       try {
-        const statusRes = await fetch(`${API_URL}/api/status`, { cache: 'no-store' })
+        const statusRes = await fetch(`${API_URL}api/status`, { cache: 'no-store' })
         const statusData = await statusRes.json()
         setStatus(statusData.status)
         setCurrentStep(statusData.current_step)
 
-        const logsRes = await fetch(`${API_URL}/api/logs`, { cache: 'no-store' })
+        const logsRes = await fetch(`${API_URL}api/logs`, { cache: 'no-store' })
         const logsData = await logsRes.json()
         setLogs(logsData.logs)
 
-        const resultRes = await fetch(`${API_URL}/api/result`, { cache: 'no-store' })
+        const resultRes = await fetch(`${API_URL}api/result`, { cache: 'no-store' })
         const resultData = await resultRes.json()
         setResult(resultData.result)
         setJiraTicket(resultData.jira_ticket)
@@ -1440,7 +1440,7 @@ function App() {
   const runPipeline = async () => {
     setIsLoading(true)
     try {
-      await fetch(`${API_URL}/api/pipeline/run`, { method: 'POST' })
+      await fetch(`${API_URL}api/pipeline/run`, { method: 'POST' })
       setStatus('running')
       setLogs([])
       setResult(null)
@@ -1457,7 +1457,7 @@ function App() {
   const resetPipeline = async () => {
     setIsLoading(true)
     try {
-      await fetch(`${API_URL}/api/pipeline/reset`, { method: 'POST' })
+      await fetch(`${API_URL}api/pipeline/reset`, { method: 'POST' })
       setStatus('idle')
       setCurrentStep(0)
       setLogs([])
